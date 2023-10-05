@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class EventDate implements Comparable<EventDate>{
+public class EventDate extends DefaultEntity implements Comparable<EventDate> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

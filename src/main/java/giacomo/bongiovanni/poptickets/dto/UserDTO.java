@@ -1,6 +1,7 @@
 package giacomo.bongiovanni.poptickets.dto;
 
 import giacomo.bongiovanni.poptickets.model.Role;
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Past;
@@ -10,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -41,4 +43,10 @@ public class UserDTO {
 
     @NotBlank(message = "role cannot be blank")
     private Role role;
+
+    private boolean blocked;
+
+    private LocalDateTime createdAt = LocalDateTime.now();
+
+    private LocalDateTime deletedAt;
 }

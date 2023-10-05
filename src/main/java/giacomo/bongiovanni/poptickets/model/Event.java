@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Event {
+public class Event extends DefaultEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

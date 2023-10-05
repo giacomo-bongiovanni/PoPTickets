@@ -69,5 +69,4 @@ public class UserController {
     public ResponseEntity<Boolean> deleteById(@PathVariable String email){
         return new ResponseEntity<>(userService.deleteByEmail(email),HttpStatus.OK);
     }
-    //non mi ricordo cosa dovevo fare
 }

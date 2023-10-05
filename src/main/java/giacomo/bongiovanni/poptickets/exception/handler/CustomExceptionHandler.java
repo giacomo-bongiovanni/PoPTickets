@@ -15,16 +15,16 @@ import java.util.Map;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(UserException.class)
-    public ResponseEntity<ErrorMessageDTO> userException(UserException u, WebRequest w){
+    @ExceptionHandler(EntityException.class)
+    public ResponseEntity<ErrorMessageDTO> userException(EntityException u, WebRequest w){
         Map<String,String> errors = new HashMap<>();
         errors.put(u.getKey(),u.getValue());
         ErrorMessageDTO errorMessageDTO = new ErrorMessageDTO();
         errorMessageDTO.setDate(LocalDateTime.now());
         errorMessageDTO.setMessages(errors);
         errorMessageDTO.setPath(w.getContextPath());
-        if(u instanceof UserNotFoundException) return new ResponseEntity<>(errorMessageDTO, HttpStatus.NOT_FOUND);
-        else if(u instanceof UserDuplicateException)return new ResponseEntity<>(errorMessageDTO, HttpStatus.CONFLICT);
+        if(u instanceof EntityNotFoundException) return new ResponseEntity<>(errorMessageDTO, HttpStatus.NOT_FOUND);
+        else if(u instanceof EntityDuplicateException)return new ResponseEntity<>(errorMessageDTO, HttpStatus.CONFLICT);
         else return new ResponseEntity<>(errorMessageDTO, HttpStatus.BAD_REQUEST);
     }
 

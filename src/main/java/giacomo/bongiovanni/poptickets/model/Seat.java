@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Seat {
+public class Seat extends DefaultEntity{
    @Id
    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

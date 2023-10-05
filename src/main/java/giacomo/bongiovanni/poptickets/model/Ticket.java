@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Ticket {
+public class Ticket extends DefaultEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

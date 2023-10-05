@@ -66,13 +66,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO findById(long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
         return UserMapper.INSTANCE.userToUserDTO(user);
     }
 
     @Override
     public UserDTO findByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException(email));
         return UserMapper.INSTANCE.userToUserDTO(user);
     }
 
@@ -82,16 +82,16 @@ public class UserServiceImpl implements UserService {
         try {
             user = userRepository.save(user);
         }catch (DataIntegrityViolationException e){
-            throw new UserDuplicateException(user.getEmail());
+            throw new EntityDuplicateException(user.getEmail());
         }catch (Exception e){
-            throw new UserCreationExeption(user.getId());
+            throw new EntityCreationExeption(user.getId());
         }
         return UserMapper.INSTANCE.userToUserDTO(user);
     }
 
     @Override
     public UserDTO block(long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
         try{
             user.setBlocked(true);
             userRepository.save(user);
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO unlock(long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
         try{
             user.setBlocked(false);
             userRepository.save(user);
@@ -115,14 +115,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean deleteById(long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
 
         return delete(user);
     }
 
     @Override
     public boolean deleteByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException(email));
 
         return delete(user);
     }
@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
         try {
             userRepository.save(user);
         } catch (Exception e) {
-            throw new UserDeletionException(user.getId());
+            throw new EntityDeletionException(user.getId());
         }
 
         return true;
