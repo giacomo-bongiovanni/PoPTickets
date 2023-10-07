@@ -16,7 +16,7 @@ import java.util.Map;
 public class CustomExceptionHandler {
 
     @ExceptionHandler(EntityException.class)
-    public ResponseEntity<ErrorMessageDTO> userException(EntityException u, WebRequest w){
+    public ResponseEntity<ErrorMessageDTO> EntityException(EntityException u, WebRequest w){
         Map<String,String> errors = new HashMap<>();
         errors.put(u.getKey(),u.getValue());
         ErrorMessageDTO errorMessageDTO = new ErrorMessageDTO();

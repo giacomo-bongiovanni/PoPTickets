@@ -19,4 +19,5 @@ public class Category extends DefaultEntity {
     private String name;
     @OneToMany(mappedBy = "category")
     private List<Event> events;
+    //todo: questa deve essere una many to many
 }
