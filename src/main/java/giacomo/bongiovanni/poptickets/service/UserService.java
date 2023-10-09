@@ -12,6 +12,7 @@ public interface UserService {
     UserDTO findById(long id);
     UserDTO findByEmail(String email);
     UserDTO save(UserDTO userDTO);
+    UserDTO login(String username,String password);
     UserDTO block(long id);
     UserDTO unlock(long id);
     boolean deleteById(long id);

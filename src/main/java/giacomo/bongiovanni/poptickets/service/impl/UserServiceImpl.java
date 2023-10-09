@@ -90,6 +90,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO login(String username, String password) {
+        return null;
+    }
+
+    @Override
     public UserDTO block(long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
         try{

@@ -1,6 +1,7 @@
 package giacomo.bongiovanni.poptickets.contoller;
 
 import giacomo.bongiovanni.poptickets.dto.UserDTO;
+import giacomo.bongiovanni.poptickets.security.JwtService;
 import giacomo.bongiovanni.poptickets.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +13,11 @@ import java.util.List;
 @RequestMapping(path = "/api")
 public class UserController {
     private final UserService userService;
+    private final JwtService jwtService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtService jwtService) {
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
     @GetMapping(value = "/all/user/findAll")
