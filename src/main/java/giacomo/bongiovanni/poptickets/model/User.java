@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "custom_user")
 public class User extends DefaultEntity implements UserDetails {
 
     @Id

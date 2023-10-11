@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -20,9 +21,13 @@ public class Event extends DefaultEntity{
     @Lob
     @Column(length = 512)
     private String description;
-    @ManyToOne
-    @JoinColumn(name = "categoryID",nullable = false)
-    private Category category;
+    @ManyToMany
+    @JoinTable(
+            name = "events_categories",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories = new ArrayList<>();
     @ManyToOne
     @JoinColumn(name = "placeId",nullable = false)
     private Place place;

@@ -7,9 +7,12 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 @Configuration
 @EnableWebSecurity
@@ -22,12 +25,16 @@ public class FilterChainManager {
         this.authenticationProvider = authenticationProvider;
     }
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, HandlerMappingIntrospector introspector) throws Exception{
+        MvcRequestMatcher.Builder builder = new MvcRequestMatcher.Builder(introspector);
         httpSecurity.csrf(AbstractHttpConfigurer :: disable)
+                .headers(cust -> cust.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/all").permitAll()
-                        .requestMatchers("/admin/**").hasRole(Role.ADMIN.toString())
-                        .requestMatchers("/superadmin/**").hasRole(Role.SUPERADMIN.toString())
+                        .requestMatchers(builder.pattern("/h2-console/**")).permitAll()
+                        .requestMatchers(builder.pattern("/all/**")).permitAll()
+                        .requestMatchers(builder.pattern("/admin/**")).hasRole(Role.ADMIN.toString())
+                        .requestMatchers(builder.pattern("/superadmin/**")).hasRole(Role.SUPERADMIN.toString())
+                        .anyRequest().permitAll()
                 ).sessionManagement(sess->sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .cors(AbstractHttpConfigurer :: disable)
                 .authenticationProvider(authenticationProvider)

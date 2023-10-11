@@ -89,10 +89,7 @@ public class UserServiceImpl implements UserService {
         return UserMapper.INSTANCE.userToUserDTO(user);
     }
 
-    @Override
-    public UserDTO login(String username, String password) {
-        return null;
-    }
+
 
     @Override
     public UserDTO block(long id) {

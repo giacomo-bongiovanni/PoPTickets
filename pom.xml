@@ -79,6 +79,11 @@
             <artifactId>jjwt-jackson</artifactId>
             <version>0.12.2</version>
         </dependency>
+        <!--h2database-->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
 
 
 
