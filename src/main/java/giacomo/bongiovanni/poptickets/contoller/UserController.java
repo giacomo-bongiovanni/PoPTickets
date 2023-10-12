@@ -8,7 +8,6 @@ import giacomo.bongiovanni.poptickets.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,12 +22,12 @@ public class UserController {
         this.userService = userService;
         this.authenticationService = authenticationService;
     }
-    @PostMapping("/register")
+    @PostMapping("all/user/register")
     public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(authenticationService.register(userDTO),HttpStatus.CREATED);
     }
 
-    @PostMapping(path = "/authenticate")
+    @PostMapping(path = "all/user/authenticate")
     public ResponseEntity<TokenDTO> authenticateUser(@Valid @RequestBody UserLoginDTO userLoginDTO) {
         return new ResponseEntity<>(authenticationService.authenticate(userLoginDTO),HttpStatus.OK);
     }
