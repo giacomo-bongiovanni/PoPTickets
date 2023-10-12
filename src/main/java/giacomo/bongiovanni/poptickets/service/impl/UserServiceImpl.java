@@ -75,22 +75,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException(email));
         return UserMapper.INSTANCE.userToUserDTO(user);
     }
-
-    @Override
-    public UserDTO save(UserDTO userDTO) {
-        User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-        try {
-            user = userRepository.save(user);
-        }catch (DataIntegrityViolationException e){
-            throw new EntityDuplicateException(user.getEmail());
-        }catch (Exception e){
-            throw new EntityCreationExeption(user.getId());
-        }
-        return UserMapper.INSTANCE.userToUserDTO(user);
-    }
-
-
-
     @Override
     public UserDTO block(long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));

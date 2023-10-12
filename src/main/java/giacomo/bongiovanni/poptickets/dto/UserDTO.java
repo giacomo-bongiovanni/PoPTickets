@@ -42,7 +42,7 @@ public class UserDTO {
     private String fiscalCode;
 
     @NotBlank(message = "role cannot be blank")
-    private Role role;
+    private String role;
 
     private boolean blocked;
 

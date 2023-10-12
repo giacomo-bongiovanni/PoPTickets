@@ -1,10 +1,14 @@
 package giacomo.bongiovanni.poptickets.contoller;
 
+import giacomo.bongiovanni.poptickets.dto.TokenDTO;
 import giacomo.bongiovanni.poptickets.dto.UserDTO;
-import giacomo.bongiovanni.poptickets.security.JwtService;
+import giacomo.bongiovanni.poptickets.dto.UserLoginDTO;
+import giacomo.bongiovanni.poptickets.security.AuthenticationService;
 import giacomo.bongiovanni.poptickets.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,11 +17,20 @@ import java.util.List;
 @RequestMapping(path = "/api")
 public class UserController {
     private final UserService userService;
-    private final JwtService jwtService;
+    private final AuthenticationService authenticationService;
 
-    public UserController(UserService userService, JwtService jwtService) {
+    public UserController(UserService userService, AuthenticationService authenticationService) {
         this.userService = userService;
-        this.jwtService = jwtService;
+        this.authenticationService = authenticationService;
+    }
+    @PostMapping("/register")
+    public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO userDTO) {
+        return new ResponseEntity<>(authenticationService.register(userDTO),HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/authenticate")
+    public ResponseEntity<TokenDTO> authenticateUser(@Valid @RequestBody UserLoginDTO userLoginDTO) {
+        return new ResponseEntity<>(authenticationService.authenticate(userLoginDTO),HttpStatus.OK);
     }
 
     @GetMapping(value = "/all/user/findAll")
@@ -50,10 +63,6 @@ public class UserController {
         return new ResponseEntity<>(userService.findByEmail(email),HttpStatus.OK);
     }
 
-    @PostMapping(value = "/all/user/save")
-    public ResponseEntity<UserDTO> save (@RequestBody UserDTO userDTO){
-        return new ResponseEntity<>(userService.save(userDTO),HttpStatus.CREATED);
-    }
     @PatchMapping (value = "/superadmin/user/block/{id}")
     public ResponseEntity<UserDTO> block(@PathVariable long id){
         return new ResponseEntity<>(userService.block(id),HttpStatus.OK);

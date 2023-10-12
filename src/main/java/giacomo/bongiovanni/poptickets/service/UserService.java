@@ -11,7 +11,6 @@ public interface UserService {
     List<UserDTO> findAllAdmin();
     UserDTO findById(long id);
     UserDTO findByEmail(String email);
-    UserDTO save(UserDTO userDTO);
     UserDTO block(long id);
     UserDTO unlock(long id);
     boolean deleteById(long id);

@@ -1,10 +1,9 @@
 package giacomo.bongiovanni.poptickets.security;
 
-import giacomo.bongiovanni.poptickets.dto.mapper.UserMapper;
-import giacomo.bongiovanni.poptickets.model.User;
-import giacomo.bongiovanni.poptickets.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,64 +11,71 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 @Service
 public class JwtService {
 
-    private final UserService userService;
-    public JwtService(UserService userService) {
-        this.userService = userService;
-    }
 
     @Value("${jwt.secret}")
-    private String key;
+    private String SECRET;
 
 
-    private Key generateKey(){
-        return Keys.hmacShaKeyFor(key.getBytes());
+    public String generateToken(String username) {
+        Map<String, Object> claims = new HashMap<>();
+        return createToken(claims, username);
     }
 
-    private Claims createPayloadToken(User u){
-        String role = u.getRole().toString();
-        String username = u.getEmail();
-        Claims claims = Jwts.claims().add("role",role).subject(username).build();
-        return claims;
-    }
-
-
-    public String createToken(User u){
-        Claims c= createPayloadToken(u);
-        long expiration = 1000L*60*60*24*60;
-        String token = Jwts.builder()
-                .setClaims(c)
+    private String createToken(Map<String, Object> claims, String username) {
+        // I actually create the JWT token
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis()+expiration))
-                .signWith(generateKey())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30))
+                .signWith(getSignKey(), SignatureAlgorithm.HS256) // the token is signed using the secret key SECRET
                 .compact();
-        return token;
     }
 
-    private Claims extractClaim(String token){
-        Claims c=Jwts.parser()
-                .setSigningKey(generateKey())
+    // I convert the secret key (hexadecimal string) into a signing key used
+    private Key getSignKey() {
+        byte[] keyBytes= Decoders.BASE64.decode(SECRET);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts
+                .parser()
+                .setSigningKey(getSignKey())
                 .build()
                 .parseSignedClaims(token)
-                .getPayload();
-        return c;
+                .getBody();
+
     }
-    public String extractSubject(String token){
-        return extractClaim(token).getSubject();
+
+    private Boolean isTokenExpired(String token) {
+        return extractExpiration(token).before(new Date());
     }
-    public User extractUser(String token){
-        String username = extractSubject(token);
-        return UserMapper.INSTANCE.userDTOToUser(userService.findByEmail(username));
-    }
-    private boolean isTokenExpired(String token) {
-        Date expirationDate =extractClaim(token).getExpiration();
-        return expirationDate.before(new Date());
-    }
+
     public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractSubject(token);
+        // username extracted from the token
+        final String username = extractUsername(token);
+
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
