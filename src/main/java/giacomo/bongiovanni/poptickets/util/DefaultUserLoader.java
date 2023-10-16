@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 
 @Service
-public class DefaulUserLoader implements ApplicationListener<ApplicationReadyEvent> {
+public class DefaultUserLoader implements ApplicationListener<ApplicationReadyEvent> {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public DefaulUserLoader(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DefaultUserLoader(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }

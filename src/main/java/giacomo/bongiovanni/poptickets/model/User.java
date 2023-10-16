@@ -28,7 +28,7 @@ public class User extends DefaultEntity implements UserDetails {
     private String surname;
     @Column(nullable = false,unique = true,length = 50)
     private String email;
-    @Column(nullable = false,length = 30)
+    @Column(nullable = false,length = 100)
     private String password;
     @Column(nullable = false,length = 20)
     private LocalDate birthDate;
