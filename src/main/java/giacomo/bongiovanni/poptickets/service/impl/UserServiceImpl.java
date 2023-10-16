@@ -6,8 +6,11 @@ import giacomo.bongiovanni.poptickets.model.Role;
 import giacomo.bongiovanni.poptickets.model.User;
 import giacomo.bongiovanni.poptickets.repository.UserRepository;
 import giacomo.bongiovanni.poptickets.service.UserService;
+import org.mapstruct.control.MappingControl;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -75,6 +78,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException(email));
         return UserMapper.INSTANCE.userToUserDTO(user);
     }
+
+
+
     @Override
     public UserDTO block(long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));

@@ -41,7 +41,6 @@ public class UserDTO {
     @Size(max = 20, message = "fiscalCode cannot be longer than 20 character")
     private String fiscalCode;
 
-    @NotBlank(message = "role cannot be blank")
     private String role;
 
     private boolean blocked;

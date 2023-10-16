@@ -1,6 +1,10 @@
 package giacomo.bongiovanni.poptickets.service;
 
 import giacomo.bongiovanni.poptickets.dto.UserDTO;
+import giacomo.bongiovanni.poptickets.model.Role;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 
 import java.util.List;
 

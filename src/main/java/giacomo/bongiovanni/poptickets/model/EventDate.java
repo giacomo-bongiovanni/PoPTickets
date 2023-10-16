@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -22,6 +23,10 @@ public class EventDate extends DefaultEntity implements Comparable<EventDate> {
     @ManyToOne
     @JoinColumn(name = "eventID",nullable = false)
     private Event event;
+    @OneToMany(mappedBy = "eventDate")
+    List<Ticket> tickets;
+
+
     //mette in ordine crescente i miei eventi
     //l'ordine crescente viene dato confrontanto a due a due gli oggetti
     //chiamo il metodo su uno dei due e lo confronto con l'altro

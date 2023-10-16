@@ -3,6 +3,7 @@ package giacomo.bongiovanni.poptickets.contoller;
 import giacomo.bongiovanni.poptickets.dto.TokenDTO;
 import giacomo.bongiovanni.poptickets.dto.UserDTO;
 import giacomo.bongiovanni.poptickets.dto.UserLoginDTO;
+import giacomo.bongiovanni.poptickets.model.Role;
 import giacomo.bongiovanni.poptickets.security.AuthenticationService;
 import giacomo.bongiovanni.poptickets.service.UserService;
 import jakarta.validation.Valid;
@@ -22,9 +23,17 @@ public class UserController {
         this.userService = userService;
         this.authenticationService = authenticationService;
     }
-    @PostMapping("all/user/register")
-    public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO userDTO) {
-        return new ResponseEntity<>(authenticationService.register(userDTO),HttpStatus.CREATED);
+    @PostMapping("all/user/registerCustomer")
+    public ResponseEntity<UserDTO> registerCustomer(@Valid @RequestBody UserDTO userDTO) {
+        return new ResponseEntity<>(authenticationService.registerCustomer(userDTO), HttpStatus.CREATED);
+    }
+    @PostMapping("admin/user/registerSeller")
+    public ResponseEntity<UserDTO> registerSeller(@Valid @RequestBody UserDTO userDTO) {
+        return new ResponseEntity<>(authenticationService.registerSeller(userDTO), HttpStatus.CREATED);
+    }
+    @PostMapping("superadmin/user/registerAdmin")
+    public ResponseEntity<UserDTO> registerAdmin(@Valid @RequestBody UserDTO userDTO) {
+        return new ResponseEntity<>(authenticationService.registerAdmin(userDTO), HttpStatus.CREATED);
     }
 
     @PostMapping(path = "all/user/authenticate")
@@ -57,7 +66,7 @@ public class UserController {
         return new ResponseEntity<>(userService.findById(id),HttpStatus.OK);
     }
 
-    @PostMapping(value = "/admin/user/findByEmail/{email}")
+    @PatchMapping (value = "/admin/user/findByEmail/{email}")
     public ResponseEntity<UserDTO> findByEmail(@PathVariable String email){
         return new ResponseEntity<>(userService.findByEmail(email),HttpStatus.OK);
     }

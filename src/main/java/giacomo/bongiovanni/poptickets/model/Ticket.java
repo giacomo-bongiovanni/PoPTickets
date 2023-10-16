@@ -23,5 +23,8 @@ public class Ticket extends DefaultEntity {
     @ManyToOne
     @JoinColumn(name = "userId",nullable = false)
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "event_dateId",nullable = false)
+    private EventDate eventDate;
 }
 

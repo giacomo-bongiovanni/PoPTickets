@@ -11,6 +11,7 @@ import giacomo.bongiovanni.poptickets.model.Role;
 import giacomo.bongiovanni.poptickets.model.User;
 import giacomo.bongiovanni.poptickets.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,20 +34,11 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
-    @Transactional(rollbackOn = Exception.class)
-
-    public UserDTO register(UserDTO userDTO) {
+    public UserDTO register(@NotNull UserDTO userDTO, Role role) {
         // I check if there is a user with the same email
         if (userRepository.findByEmail(userDTO.getEmail()).orElse(null) != null) return null;
 
         User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
-
-        Role role = switch (userDTO.getRole()) {
-            case "ADMIN" -> Role.ADMIN;
-            case "SELLER" -> Role.SELLER;
-            case "CUSTOMER" -> Role.CUSTOMER;
-            default -> null;
-        };
 
         if (role == null) return null;
 
@@ -63,7 +55,19 @@ public class AuthenticationService {
         return UserMapper.INSTANCE.userToUserDTO(user);
     }
 
-    public TokenDTO authenticate(UserLoginDTO userLoginDTO) {
+    public UserDTO registerAdmin(UserDTO userDTO){
+        Role role = Role.ADMIN;
+        return register(userDTO,role);
+    }
+    public UserDTO registerSeller(UserDTO userDTO){
+        Role role = Role.SELLER;
+        return register(userDTO,role);
+    }
+    public UserDTO registerCustomer(UserDTO userDTO){
+        Role role = Role.CUSTOMER;
+        return register(userDTO,role);
+    }
+    public TokenDTO authenticate(@NotNull UserLoginDTO userLoginDTO) {
         // I authenticate a user based on their email and password
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userLoginDTO.getEmail(), userLoginDTO.getPassword())
