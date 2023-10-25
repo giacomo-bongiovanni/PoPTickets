@@ -35,6 +35,7 @@ public class User extends DefaultEntity implements UserDetails {
     @Column(nullable = false,unique = true,length = 30)
     private String fiscalCode;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
     private boolean blocked;
     @OneToMany(mappedBy = "user")

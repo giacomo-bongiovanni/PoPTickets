@@ -2,10 +2,7 @@ package giacomo.bongiovanni.poptickets.dto;
 
 import giacomo.bongiovanni.poptickets.model.Role;
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,9 +33,11 @@ public class UserDTO {
     private String password;
 
     @Past(message = "birth date cannot be a future date")
+    @NotNull
     private LocalDate birthDate;
 
     @Size(max = 20, message = "fiscalCode cannot be longer than 20 character")
+    @NotNull
     private String fiscalCode;
 
     private String role;

@@ -36,8 +36,9 @@ public class AuthenticationService {
 
     public UserDTO register(@NotNull UserDTO userDTO, Role role) {
         // I check if there is a user with the same email
-        if (userRepository.findByEmail(userDTO.getEmail()).orElse(null) != null) return null;
-
+        if (userRepository.findByEmail(userDTO.getEmail()).orElse(null) != null){
+            throw new EntityDuplicateException(userDTO.getEmail());
+        }
         User user = UserMapper.INSTANCE.userDTOToUser(userDTO);
 
         if (role == null) return null;

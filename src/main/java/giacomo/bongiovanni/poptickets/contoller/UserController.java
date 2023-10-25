@@ -23,20 +23,20 @@ public class UserController {
         this.userService = userService;
         this.authenticationService = authenticationService;
     }
-    @PostMapping("all/user/registerCustomer")
+    @PostMapping("/all/user/registerCustomer")
     public ResponseEntity<UserDTO> registerCustomer(@Valid @RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(authenticationService.registerCustomer(userDTO), HttpStatus.CREATED);
     }
-    @PostMapping("admin/user/registerSeller")
+    @PostMapping("/admin/user/registerSeller")
     public ResponseEntity<UserDTO> registerSeller(@Valid @RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(authenticationService.registerSeller(userDTO), HttpStatus.CREATED);
     }
-    @PostMapping("superadmin/user/registerAdmin")
+    @PostMapping("/superadmin/user/registerAdmin")
     public ResponseEntity<UserDTO> registerAdmin(@Valid @RequestBody UserDTO userDTO) {
         return new ResponseEntity<>(authenticationService.registerAdmin(userDTO), HttpStatus.CREATED);
     }
 
-    @PostMapping(path = "all/user/authenticate")
+    @PostMapping(path = "/all/user/authenticate")
     public ResponseEntity<TokenDTO> authenticateUser(@Valid @RequestBody UserLoginDTO userLoginDTO) {
         return new ResponseEntity<>(authenticationService.authenticate(userLoginDTO),HttpStatus.OK);
     }
@@ -66,7 +66,7 @@ public class UserController {
         return new ResponseEntity<>(userService.findById(id),HttpStatus.OK);
     }
 
-    @PatchMapping (value = "/admin/user/findByEmail/{email}")
+    @PostMapping (value = "/admin/user/findByEmail/{email}")
     public ResponseEntity<UserDTO> findByEmail(@PathVariable String email){
         return new ResponseEntity<>(userService.findByEmail(email),HttpStatus.OK);
     }
